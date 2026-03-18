@@ -5,8 +5,8 @@ import numpy as np
 import os
 from concurrent.futures import ThreadPoolExecutor # This is for running multiple threads at once, added this feature later
 
-# Pulls my key from Hugging Face Secrets (uses my test key if not found)
-api_key = os.getenv("ROBOFLOW_API_KEY", "zboym1fZcR8kXWX1nlZ1") 
+# Pulls my key from Hugging Face Secrets 
+api_key = os.getenv("ROBOFLOW_API_KEY") 
 
 CLIENT = InferenceHTTPClient(api_url="https://serverless.roboflow.com", api_key=api_key)
 MODEL_ID = "deepfashion2-m-10k/2"
