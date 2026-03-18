@@ -38,7 +38,7 @@ def analyze_inspo(files, color_count):
 
         # THE NETWORK WAIT: This is where the speedup happens from my last version without threads (I saved it in main_without_threads.py)
         # While this waits for a response, the computer can start the next upload.
-        model_res = CLIENT.infer(temp_shrunk_name, model_id=MODEL_ID)
+        model_res = CLIENT.infer(temp_shrunk_name, model_id=MODEL_ID, confidence=32)
 
         if os.path.exists(temp_shrunk_name):
             os.remove(temp_shrunk_name)
@@ -105,8 +105,7 @@ def analyze_inspo(files, color_count):
     # How should it choose the very first random colors?
     initial_choice_method = cv2.KMEANS_RANDOM_CENTERS
 
-    # Run the clustering algorithm
-    # compactness: (The '_') A score of how 'tight' the color groups are (we don't need this)
+    # Now we the clustering algorithm
     # result_labels: Which pixel belongs to which color group (0, 1, 2...)
     # color_centers: The actual RGB values of our top colors
     kmeans_res = cv2.kmeans(
@@ -139,18 +138,18 @@ def analyze_inspo(files, color_count):
     for i in range(len(final_rgb_colors)):
         rgb = final_rgb_colors[i]
         
-        # Calculate percentage of this color in the whole set
+        # Calculating percentage of this color in the whole set
         percent = (pix_counts[i] / total_samples)
         percentage_text = percent * 100
         
         hexcode = '#{:02x}{:02x}{:02x}'.format(rgb[0], rgb[1], rgb[2])
         report_text += f"Color {i+1}: {hexcode} ({percentage_text:.1f}%)\n"
         
-        # Calculate stripe width (Percentage of the 500-pixel wide bar)
+        # Calculating stripe width (Percentage of the 500-pixel wide bar)
         stripe_width = int(percent * 500)
         end_position = current_position + stripe_width
         
-        # Draw the color stripe
+        # Drawing the color stripe
         visual_bar[:, current_position:end_position] = rgb
         current_position = end_position
 
