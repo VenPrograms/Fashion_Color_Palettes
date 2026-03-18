@@ -1,0 +1,4 @@
+gradio
+inference-sdk
+opencv-python-headless
+numpy
